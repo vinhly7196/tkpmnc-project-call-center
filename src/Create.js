@@ -71,7 +71,7 @@ const Create = () => {
           }
         </select> */}
 
-        <label>Chọn nơi đón / trả khách</label>
+        <label>Chọn nơi đón / điểm đến</label>
         <Map setOrigin={setOrigin}  setDestination={setDestination}/>
         
         <button>Book</button>
