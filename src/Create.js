@@ -12,30 +12,66 @@ const Create = () => {
   const [destination, setDestination] = useState('');
   const [type, setType] = useState('');
 
-  const history = useHistory();
-
-  // const {data: carType, error, isPending } = useFetch('https://effective-space-couscous-7rrrrqrv6g9hp9vx-8000.app.github.dev/cartypes');
-
   const [origin, setOrigin] = useState({
     lat: 10.773599,
     lng: 106.694420,
   });
 
+  const [oriAddress, setOriAddress] = useState('');
+  const [destAddress, setDestAddress] = useState('');
+  const history = useHistory();
 
+  // const {data: carType, error, isPending } = useFetch('https://effective-space-couscous-7rrrrqrv6g9hp9vx-8000.app.github.dev/cartypes');
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trip = { customer_name, origin, phone, destination };
-    console.log(trip)
+    // const trip = { customer_name, origin, phone, destination };
+    // console.log(trip)
 
-    // fetch('http://localhost:8000/blogs/', {
-    //   method: 'POST',
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(trip)
-    // }).then(() => {
-    //   // history.go(-1);
-    //   history.push('/');
-    // })
+    const trip = 
+    {
+      "customer": {
+        "id": "",
+        "name": customer_name,
+        "phone": phone,
+        "score": 0,
+        "type": "call-center"
+      },
+      "destination": {
+        "address": "456 Elm St",
+        "coordinate": [
+          89.9,
+          179.9
+        ]
+      },
+      "pickup": {
+        "address": "123 Main St",
+        "coordinate": [
+          90,
+          180
+        ]
+      },
+      "requester": {
+        "id": "1",
+        "name": "John Doe",
+        "phone": "555-123-4567",
+        "score": 3,
+        "type": "operator"
+      },
+      "vehicle_type": "1"
+    }
+
+    }
+
+    fetch('https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/book/call-center', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(trip)
+    }).then(() => {
+      // history.go(-1);
+      history.push('/');
+    })
   }
 
 
@@ -72,7 +108,7 @@ const Create = () => {
         </select> */}
 
         <label>Chọn nơi đón / điểm đến</label>
-        <Map setOrigin={setOrigin}  setDestination={setDestination}/>
+        <Map setOrigin={setOrigin}  setDestination={setDestination} setDestAddress={setDestAddress} setOriAddress={setOriAddress}/>
         
         <button>Book</button>
       </form>

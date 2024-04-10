@@ -44,7 +44,7 @@ const getLatLngFromPlaceId = async (placeId) => {
   }
 };
 
-const MapComponent = ({ setOrigin, setDestination }) => {
+const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: REACT_APP_GOOGLE_MAPS_KEY,
     libraries: ['places'],
@@ -110,7 +110,12 @@ const MapComponent = ({ setOrigin, setDestination }) => {
       <Autocomplete 
       restrictions={{ country: "VN" }}
       >
-        <Input type='text' placeholder='Nơi đón khách' ref={originRef} />
+        <Input 
+        type='text' 
+        placeholder='Nơi đón khách' 
+        ref={originRef} 
+        onChange={(e) => setOriAddress(e.target.value)}
+        />
       </Autocomplete>
 
       <Autocomplete restrictions={{ country: "VN" }}>
@@ -118,6 +123,7 @@ const MapComponent = ({ setOrigin, setDestination }) => {
                 type='text'
                 placeholder='Nơi trả khách'
                 ref={destiantionRef}
+                onChange={(e) => setDestAddress(e.target.value)}
               />
       </Autocomplete>
 
