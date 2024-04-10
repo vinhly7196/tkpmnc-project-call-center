@@ -72,9 +72,9 @@ const Create = () => {
     .then((response) => {
       return response.json()["trip_created"]
     })
-    .then((tripid) => {
+    .then((trip_id) => {
       async function fetchTrip() {
-        const res = await fetch(`https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/check-booking/${trip_id}`)  
+        const res = await fetch(`https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/check-booking/${trip_id}$)  
         const tripResult = await res.json();
         return tripResult;   
       }
