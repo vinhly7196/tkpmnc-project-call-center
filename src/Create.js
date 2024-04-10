@@ -36,41 +36,58 @@ const Create = () => {
         "name": customer_name,
         "phone": phone,
         "score": 0,
-        "type": "call-center"
+        "type": "customer"
       },
       "destination": {
-        "address": "456 Elm St",
+        "address": destAddress,
         "coordinate": [
-          89.9,
-          179.9
+          destination.lat,
+          destination.lng
         ]
       },
       "pickup": {
-        "address": "123 Main St",
+        "address": oriAddress,
         "coordinate": [
-          90,
-          180
+          origin.lat,
+          origin.lng
         ]
       },
       "requester": {
-        "id": "1",
+        "id": "",
         "name": "John Doe",
         "phone": "555-123-4567",
         "score": 3,
-        "type": "operator"
+        "type": "call-center"
       },
       "vehicle_type": "1"
     }
 
-    }
+    
 
     fetch('https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/book/call-center', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(trip)
-    }).then(() => {
-      // history.go(-1);
-      history.push('/');
+    })
+    .then((response) => {
+      return response.json()["trip_created"]
+    })
+    .then((tripid) => {
+      async function fetchTrip() {
+        const res = await fetch(`https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/check-booking/${trip_id}`)  
+        const tripResult = await res.json();
+        return tripResult;   
+      }
+
+      fetchTrip().then(
+        (tripResult) => {
+          if (tripResult.result != "END") {
+            console.log(tripResult);
+          }
+        }
+      )
+      
+
     })
   }
 
