@@ -102,3 +102,13 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+.price {
+  background: #99ff66;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  margin: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+}

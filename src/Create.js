@@ -3,14 +3,16 @@ import { useHistory } from "react-router-dom";
 import Map from "./Map";
 import useFetch from "./useFetch";
 import CarTypePicker from "./CarTypePicker";
+import Datetime from 'react-datetime';
 
 
 
 const Create = () => {
   const [customer_name, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
-  const [destination, setDestination] = useState('');
+  const [destinationField, setDestination] = useState('');
   const [type, setType] = useState('');
+  const [distance, setDistance] = useState('')
 
   const [origin, setOrigin] = useState({
     lat: 10.773599,
@@ -19,82 +21,111 @@ const Create = () => {
 
   const [oriAddress, setOriAddress] = useState('');
   const [destAddress, setDestAddress] = useState('');
+  const [requestType, setRequestType] = useState('ORDINARY');
+  let [requestTime, setRequestTime] = useState(new Date());
+  const [price, setPrice] = useState('');
+  const [tripId, setTripId] = useState('');
   const history = useHistory();
+  const [vehicle_type, setVehicleType] = useState('');
 
-  // const {data: carType, error, isPending } = useFetch('https://effective-space-couscous-7rrrrqrv6g9hp9vx-8000.app.github.dev/cartypes');
+  const {data: carType, error, isPending } = useFetch('https://glowing-broccoli-vgggg4gp65w3pv54-8081.app.github.dev/vehicle-types/');
 
+  console.log(carType)
+  // set field to call api
+  const customer = {
+    id: "",
+    name: customer_name,
+    phone: phone,
+    rank: "NORMAL",
+    type: "customer"
+  }
+
+  const destination = {
+    address: destAddress,
+    coordinate: [
+      destinationField.lat,
+      destinationField.lng
+    ]
+  }
+
+  const pickup = {
+    address: oriAddress,
+    coordinate: [
+      origin.lat,
+      origin.lng
+    ]
+  }
+
+  const requester = {
+    "id": "C001",
+    "name": "Nguyen Van A",
+    "phone": "0987364736",
+    "rank": "NORMAL",
+    "type": "operator"
+  }
+
+  const trip_estimate = {
+    customer,
+    destination,
+    distance: distance,
+    pickup,
+    request_type: "ORDINARY",
+    vehicle_type: "1"
+  };
+
+  // set rule for request time only for schedule
+  if (requestType == "ORDINARY")
+  {
+    requestTime = new Date();
+  }
+
+  const trip_book = {
+    additional_services: [],
+    customer,
+    destination,
+    distance: distance,
+    id: "66252f77b3ce84711ae5bd80",
+    pickup,
+    price: price,
+    request_time: requestTime,
+    request_type: requestType,
+    requester,
+    vehicle_type: vehicle_type
+  };
+
+  
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const trip = { customer_name, origin, phone, destination };
-    // console.log(trip)
 
-    const trip = 
-    {
-      "customer": {
-        "id": "",
-        "name": customer_name,
-        "phone": phone,
-        "score": 0,
-        "type": "customer"
-      },
-      "destination": {
-        "address": destAddress,
-        "coordinate": [
-          destination.lat,
-          destination.lng
-        ]
-      },
-      "pickup": {
-        "address": oriAddress,
-        "coordinate": [
-          origin.lat,
-          origin.lng
-        ]
-      },
-      "requester": {
-        "id": "",
-        "name": "John Doe",
-        "phone": "555-123-4567",
-        "score": 3,
-        "type": "call-center"
-      },
-      "vehicle_type": "1"
-    }
+    // function to estimate price
 
-    
-
-    fetch('https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/book/call-center', {
+    fetch('https://refactored-goldfish-wgvwrr4wqjf5p74-8080.app.github.dev/api/v1/book/call-center', {
       method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(trip)
-    })
-    .then((response) => {
-      return response.json()["trip_created"]
-    })
-    .then((trip_id) => {
-      async function fetchTrip() {
-        const res = await fetch(`https://verbose-journey-x999969r5g6f6jq4-8080.app.github.dev/api/v1/check-booking/${trip_id}$)  
-        const tripResult = await res.json();
-        return tripResult;   
-      }
-
-      fetchTrip().then(
-        (tripResult) => {
-          if (tripResult.result != "END") {
-            console.log(tripResult);
-          }
-        }
-      )
       
+      headers: { 
+        "Content-Type": "application/json", 
+        'Accept': 'application/json',
+      },
 
+      body: JSON.stringify(trip_book)
+    })
+    .then((res) => { return res.json() })
+    .then(tripBooked => {
+      console.log(tripBooked)
     })
   }
+
+  
 
 
 
   return (
     <div className="create">
+      { error && <div>{ error }</div> }
+      { isPending && <div>Loading...</div> }
+      { carType && 
+      <div>
       <h2>Add a New Trip</h2>
       <form onSubmit={handleSubmit}>
         <label>Customer:</label>
@@ -112,23 +143,49 @@ const Create = () => {
           onChange={(e) => setPhone(e.target.value)}
         ></input>   
 
-        <label>Type:</label>
-        {/* <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+        <label>Vehicle Type:</label>
+        <select
+          value={vehicle_type}
+          onChange={(e) => setVehicleType(e.target.value)}
         >
           {
-            carType.map((ct) => (
-              <option value="">{ct.name}</option>
-            ))
+          carType.map((type) => (
+            <option value={type.id}>{type.name}</option>
+          ))
           }
-        </select> */}
+        </select>
 
-        <label>Chọn nơi đón / điểm đến</label>
-        <Map setOrigin={setOrigin}  setDestination={setDestination} setDestAddress={setDestAddress} setOriAddress={setOriAddress}/>
-        
+        <label>Request Type</label>
+        <select
+          value={requestType}
+          onChange={(e) => setRequestType(e.target.value)}
+        >
+          <option value="ORDINARY">ORDINARY</option>
+          <option value="SCHEDULED">SCHEDULED</option>
+        </select>
+
+        <Datetime 
+          value={requestTime}
+          onChange={setRequestTime}
+        />
+
+        <Map setOrigin={setOrigin}  
+        setDestination={setDestination} 
+        setDestAddress={setDestAddress} 
+        setOriAddress={setOriAddress} 
+        setDistance={setDistance}
+        setTripId={setTripId}
+        setPrice={setPrice}
+        trip_estimate={trip_estimate}
+        />
+
+        <div className="price">
+              { price && <div>Price: {price} VND</div> }
+            </div>
         <button>Book</button>
       </form>
+      </div>
+        }
     </div>
   );
 }
