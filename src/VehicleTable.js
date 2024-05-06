@@ -20,14 +20,14 @@ const VehicleTable =  () => {
         body: JSON.stringify(key)
       })
       const dataJS = await res.json()
-      const data_unverified_vehicles = []
-      dataJS.forEach(e => {
-        if (!e.verified)
-        {
-          data_unverified_vehicles.push(e)
-        }
-      });
-      setData(data_unverified_vehicles)
+      // const data_unverified_vehicles = []
+      // dataJS.forEach(e => {
+      //   if (!e.verified)
+      //   {
+      //     data_unverified_vehicles.push(e)
+      //   }
+      // });
+      setData(dataJS)
     } 
     search_vehicle(search);
  }, [])
