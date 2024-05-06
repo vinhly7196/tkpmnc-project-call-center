@@ -28,7 +28,7 @@ const Create = () => {
   const history = useHistory();
   const [vehicle_type, setVehicleType] = useState('');
 
-  const {data: carType, error, isPending } = useFetch('https://glowing-broccoli-vgggg4gp65w3pv54-8081.app.github.dev/vehicle-types/');
+  const {data: carType, error, isPending } = useFetch('http://209.38.168.38/vehicle/vehicle-types');
 
   console.log(carType)
   // set field to call api

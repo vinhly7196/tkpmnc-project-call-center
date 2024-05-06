@@ -112,7 +112,7 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
     trip_estimate.destination.address = destiantionRef.current.value
 
     // call api to estimate price
-    const res = await fetch('https://refactored-goldfish-wgvwrr4wqjf5p74-8080.app.github.dev/api/v1/estimate/call-center', {
+    const res = await fetch('http://209.38.168.38/trip/customer/estimate/call-center', {
       method: 'POST',
       
       headers: { 
