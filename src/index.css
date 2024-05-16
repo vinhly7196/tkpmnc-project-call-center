@@ -17,6 +17,14 @@
 .navbar h1 {
   color: #f1356d;
 }
+
+h2 {
+  color: #333;
+  padding: 1rem;
+
+}
+
+
 .navbar .links {
   margin-left: auto;
 }
@@ -102,7 +110,16 @@
   border-radius: 8px;
   cursor: pointer;
 }
-
+.vehicle-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  margin: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+}
 .price {
   background: #99ff66;
   color: #fff;
@@ -111,4 +128,11 @@
   margin: 2px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100%;
 }

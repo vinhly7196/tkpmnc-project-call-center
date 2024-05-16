@@ -15,9 +15,14 @@ export const COLUMNS = [
   }
   ,
   {
-    Header: 'Doc File Id',
-    accessor: 'document_fid'
-    // show: false
+    Header: 'Doc Status',
+    accessor: 'document_fid',
+    Cell: ({ value }) => {
+    if (value != null)
+    {
+      return <span>&#10003;</span>
+    }
+  }
 
   }
 ]

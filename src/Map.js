@@ -126,7 +126,6 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
     const tripEstimated = await res.json();
     setPrice(tripEstimated.result);
     setTripId(tripEstimated.trip_id);
-
   }
 
   function clearRoute() {

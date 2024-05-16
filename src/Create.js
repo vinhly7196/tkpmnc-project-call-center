@@ -6,7 +6,6 @@ import CarTypePicker from "./CarTypePicker";
 import Datetime from 'react-datetime';
 
 
-
 const Create = () => {
   const [customer_name, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
@@ -22,11 +21,11 @@ const Create = () => {
   const [oriAddress, setOriAddress] = useState('');
   const [destAddress, setDestAddress] = useState('');
   const [requestType, setRequestType] = useState('ORDINARY');
-  let [requestTime, setRequestTime] = useState(new Date());
+  let   [requestTime, setRequestTime] = useState(new Date());
   const [price, setPrice] = useState('');
   const [tripId, setTripId] = useState('');
   const history = useHistory();
-  const [vehicle_type, setVehicleType] = useState('');
+  const [vehicle_type, setVehicleType] = useState("660a1d500f484db6e0970db4");
 
   const {data: carType, error, isPending } = useFetch('http://209.38.168.38/vehicle/vehicle-types');
 
@@ -43,16 +42,16 @@ const Create = () => {
   const destination = {
     address: destAddress,
     coordinate: [
-      destinationField.lat,
-      destinationField.lng
+      destinationField.lng,
+      destinationField.lat
     ]
   }
 
   const pickup = {
     address: oriAddress,
     coordinate: [
-      origin.lat,
-      origin.lng
+      origin.lng,
+      origin.lat
     ]
   }
 
@@ -70,7 +69,7 @@ const Create = () => {
     distance: distance,
     pickup,
     request_type: "ORDINARY",
-    vehicle_type: "1"
+    vehicle_type: vehicle_type
   };
 
   // set rule for request time only for schedule
@@ -84,7 +83,8 @@ const Create = () => {
     customer,
     destination,
     distance: distance,
-    id: "66252f77b3ce84711ae5bd80",
+    id: tripId,
+    payment_method: "cash",
     pickup,
     price: price,
     request_time: requestTime,
@@ -98,9 +98,8 @@ const Create = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // function to estimate price
-
-    fetch('https://refactored-goldfish-wgvwrr4wqjf5p74-8080.app.github.dev/api/v1/book/call-center', {
+    console.log(trip_book)
+    fetch('http://209.38.168.38/trip/customer/book/call-center', {
       method: 'POST',
       
       headers: { 
@@ -115,10 +114,6 @@ const Create = () => {
       console.log(tripBooked)
     })
   }
-
-  
-
-
 
   return (
     <div className="create">
@@ -150,7 +145,7 @@ const Create = () => {
         >
           {
           carType.map((type) => (
-            <option value={type.id}>{type.name}</option>
+            <option value={type._id}>{type.name}</option>
           ))
           }
         </select>
