@@ -49,6 +49,7 @@ const VehicleTable =  () => {
               ))}
             </tr>
           ))}
+          
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map(row => {

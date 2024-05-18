@@ -5,7 +5,6 @@ import { Button } from '@chakra-ui/react'
 
 const VehicleDetails = () => {
     const { number } = useParams();
-    // const {data: vehicle, error, isPending } = useFetch('http://209.38.168.38/vehicle/' + number);
     const [vehicle, setData] = useState('')
     const [drivers, setDrivers] = useState([])
     const [doc, setDoc] = useState()
@@ -25,12 +24,7 @@ const VehicleDetails = () => {
             {
               // download document
               const doc_res = await fetch('http://209.38.168.38/vehicle/download-document/' + dataJS.document_fid, {
-                method: 'POST',
-                // headers: { 
-                //   // "Content-Type": 'image/png',
-                //   // "Content-Disposition": attachment; filename="picture.png"
-                // },
-                // body: JSON.stringify({})
+                method: 'POST',          
               })
 
               const docJS = await doc_res.blob()

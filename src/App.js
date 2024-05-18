@@ -5,7 +5,7 @@ import Create from './Create';
 import VehicleTable from './VehicleTable';
 import NotFound from './NotFound';
 import VehicleDetails from './VehicleDetails';
-
+import TripDetails from './TripDetails';
 function App() {
 
   
@@ -32,6 +32,10 @@ function App() {
 
             <Route path="/VehicleDetails/:number">
               <VehicleDetails />
+            </Route>
+
+            <Route path="/TripDetails/:trip_id">
+              <TripDetails />
             </Route>
 
             <Route path="*">

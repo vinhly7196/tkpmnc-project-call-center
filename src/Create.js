@@ -98,7 +98,6 @@ const Create = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(trip_book)
     fetch('http://209.38.168.38/trip/customer/book/call-center', {
       method: 'POST',
       
