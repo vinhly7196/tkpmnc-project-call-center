@@ -2,16 +2,16 @@ import React, { useMemo, useEffect, useState } from 'react'
 import { TRIPS_COLUMNS } from './TripColumns'
 import './table.css'
 import { useTable, useFilters, useGlobalFilter } from 'react-table'
-import VehicleDetailLink from './VehicleDetailsLink';
 
 
-const TripList = ({ trips }) => {
+
+const TripList = ({trips }) => {
     const columns = useMemo(() => TRIPS_COLUMNS, [])
 
     //   filter trip from call-center
     const trips_call_center = trips.filter(function (el) 
     {
-        return el.request_from == "call-center"
+        return el.request_from === "call-center"
     });
     const [data, setData] = useState(trips_call_center);
 
@@ -50,9 +50,7 @@ const TripList = ({ trips }) => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
 
-                    {/* <td>
-                    <TripDetailLink trip_id={row.original.id} />
-                    </td> */}
+                    
                 </tr>
 
                 )

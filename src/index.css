@@ -120,6 +120,17 @@ h2 {
   cursor: pointer;
   font-size: 20px;
 }
+
+button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  margin: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+}
 .price {
   background: #99ff66;
   color: #fff;

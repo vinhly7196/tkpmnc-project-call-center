@@ -48,6 +48,7 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: REACT_APP_GOOGLE_MAPS_KEY,
     libraries: ['places'],
+    region: ['VN']
   });
   const mapRef = React.useRef();
   const onMapLoad = React.useCallback((map) => {
@@ -198,9 +199,6 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
               onClick={clearRoute}
             />
         <br/>
-        {/* <div className="price">
-              { price && <div>Price: {price} VND</div> }
-            </div> */}
 
       </ButtonGroup>
     </div>

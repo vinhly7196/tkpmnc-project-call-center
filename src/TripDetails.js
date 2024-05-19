@@ -2,6 +2,7 @@ import { useHistory,useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 import React, { useMemo, useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/react'
+import dateFormat from "dateformat";
 
 const TripDetails = () => {
     const { trip_id } = useParams()
@@ -67,7 +68,8 @@ const TripDetails = () => {
         vehicle_type: trip?.vehicle_type
     };
     
-    
+    const date = dateFormat(trip?.request_time, "dddd, dS mmmm, yyyy, h:MM:ss TT");
+    const price_show = trip?.price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
     // get data 
     useEffect(() => {
         async function search_trip(trip_id) 
@@ -130,7 +132,7 @@ const TripDetails = () => {
 
           <tr>
               <td>Price</td>
-              <td>{trip?.price}</td>
+              <td>{price_show}</td>
           </tr>
 
           <tr>
@@ -139,8 +141,13 @@ const TripDetails = () => {
           </tr>
           <tr>
               <td>Request Time</td>
-              <td>{trip?.request_time}</td>
+              <td>{date}</td>
           </tr>
+
+          <tr>
+              <td>Status</td>
+              <td>{trip?.status}</td>
+          </tr> 
 
           </table>
           

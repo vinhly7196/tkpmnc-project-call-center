@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Map from "./Map";
 import useFetch from "./useFetch";
-import CarTypePicker from "./CarTypePicker";
 import Datetime from 'react-datetime';
+import {Link} from 'react-router-dom';
+import { POST_BOOK_TRIP, GET_VEHICILE_TYPES } from './Constant'
 
 
 const Create = () => {
@@ -20,14 +21,19 @@ const Create = () => {
 
   const [oriAddress, setOriAddress] = useState('');
   const [destAddress, setDestAddress] = useState('');
-  const [requestType, setRequestType] = useState('ORDINARY');
+
+  const request_type_default = "ORDINARY"
+  const [requestType, setRequestType] = useState(request_type_default);
   let   [requestTime, setRequestTime] = useState(new Date());
   const [price, setPrice] = useState('');
   const [tripId, setTripId] = useState('');
   const history = useHistory();
-  const [vehicle_type, setVehicleType] = useState("660a1d500f484db6e0970db4");
+  
+  const vehicle_type_default = "660a1d500f484db6e0970db4"
+  const [vehicle_type, setVehicleType] = useState(vehicle_type_default);
+  const [trip_booked, setTripBook] = useState()
 
-  const {data: carType, error, isPending } = useFetch('http://209.38.168.38/vehicle/vehicle-types');
+  const {data: carType, error, isPending } = useFetch(GET_VEHICILE_TYPES);
 
   console.log(carType)
   // set field to call api
@@ -68,7 +74,7 @@ const Create = () => {
     destination,
     distance: distance,
     pickup,
-    request_type: "ORDINARY",
+    request_type: request_type_default,
     vehicle_type: vehicle_type
   };
 
@@ -92,15 +98,14 @@ const Create = () => {
     requester,
     vehicle_type: vehicle_type
   };
-
+  const price_show = price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
   
   
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://209.38.168.38/trip/customer/book/call-center', {
+    fetch(POST_BOOK_TRIP, {
       method: 'POST',
-      
       headers: { 
         "Content-Type": "application/json", 
         'Accept': 'application/json',
@@ -110,7 +115,7 @@ const Create = () => {
     })
     .then((res) => { return res.json() })
     .then(tripBooked => {
-      console.log(tripBooked)
+      setTripBook(tripBooked)
     })
   }
 
@@ -174,11 +179,15 @@ const Create = () => {
         />
 
         <div className="price">
-              { price && <div>Price: {price} VND</div> }
+              { price_show && <div>Price: {price_show} VND</div> }
             </div>
         <button>Book</button>
       </form>
       </div>
+        }
+
+        {trip_booked && 
+        <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully {trip_book.id}!</Link> 
         }
     </div>
   );

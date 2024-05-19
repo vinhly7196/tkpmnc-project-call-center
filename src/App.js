@@ -6,6 +6,7 @@ import VehicleTable from './VehicleTable';
 import NotFound from './NotFound';
 import VehicleDetails from './VehicleDetails';
 import TripDetails from './TripDetails';
+import TripList from './TripList';
 function App() {
 
   
