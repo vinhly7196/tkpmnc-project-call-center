@@ -2,6 +2,7 @@ import { useHistory, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 import React, { useMemo, useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/react'
+import {GET_VEHICLE_API, GET_VEHICLE_DOC_API} from './Constant'
 
 const VehicleDetails = () => {
     const { number } = useParams();
@@ -15,7 +16,7 @@ const VehicleDetails = () => {
     useEffect(() => {
         async function search_vehicle(num) 
         {
-            const res = await fetch('http://209.38.168.38/vehicle/' + num)
+            const res = await fetch(GET_VEHICLE_API(num))
             const dataJS = await res.json()
             setData(dataJS)
             setDrivers(dataJS.drivers)
@@ -23,7 +24,8 @@ const VehicleDetails = () => {
             if (dataJS.document_fid !== null)
             {
               // download document
-              const doc_res = await fetch('http://209.38.168.38/vehicle/download-document/' + dataJS.document_fid, {
+              const doc_res = await fetch(GET_VEHICLE_DOC_API(dataJS.document_fid), 
+              {
                 method: 'POST',          
               })
 

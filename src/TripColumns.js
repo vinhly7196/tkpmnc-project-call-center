@@ -1,6 +1,5 @@
 
 import {Link} from 'react-router-dom';
-
 export const TRIPS_COLUMNS = [
   {
     Header: 'Trip ID',
@@ -9,27 +8,33 @@ export const TRIPS_COLUMNS = [
   },
   {
     Header: 'Customer',
-    accessor: 'customer.name'
+    accessor: 'customer.name',
+    disableFilters: true
   },
   {
     Header: 'Customer Phone',
     accessor: 'customer.phone'
+    
   },
   {
     Header: 'Pickup',
-    accessor: 'pickup.address'
+    accessor: 'pickup.address',
+    disableFilters: true
   },
   {
     Header: 'Destination',
-    accessor: 'destination.address'
+    accessor: 'destination.address',
+    disableFilters: true
   },
   {
     Header: 'Driver',
-    accessor: 'driver.name'
+    accessor: 'driver.name',
+    disableFilters: true
   },
   {
     Header: 'Driver phone',
-    accessor: 'driver.phone'
+    accessor: 'driver.phone',
+    disableFilters: true
   },
   {
     Header: 'Status',

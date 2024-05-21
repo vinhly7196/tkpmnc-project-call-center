@@ -1,26 +1,16 @@
-import { useHistory,useParams } from "react-router-dom";
-import useFetch from "./useFetch";
-import React, { useMemo, useEffect, useState } from 'react'
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/react'
 import dateFormat from "dateformat";
+import { GET_TRIP_API, POST_BOOK_TRIP } from './Constant'
+import {Link} from 'react-router-dom';
+import { FaCarSide } from "react-icons/fa";
+
 
 const TripDetails = () => {
     const { trip_id } = useParams()
     const [trip, setTrip] = useState()
-    // const [customer_name, setCustomerName] = useState('')
-    // const [phone, setPhone] = useState('')
-    // const [destAddress, setDestAddress] = useState('')
-    // const [dest_lng, setDestLng] = useState('')
-    // const [dest_lat, setDestLat] = useState('')
-    // const [pickupAddress, setPickupAddress] = useState('')
-    // const [pickup_lng, setPickupLng] = useState('')
-    // const [pickup_lat, setPickupLat] = useState('')
-    // const [price, setPrice] = useState()
-    // const [request_time, setRequestTime] = useState('')
-    // const [request_type, setRequestType] = useState('')
-    // const [vehicle_type, setVehicleType] = useState('')
-
-
+    const [trip_booked, setTripBook] = useState()
     const customer = {
         id: "",
         name: trip?.customer?.name,
@@ -74,7 +64,7 @@ const TripDetails = () => {
     useEffect(() => {
         async function search_trip(trip_id) 
         {
-            const res = await fetch('http://209.38.168.38/trip/get/' + trip_id)
+            const res = await fetch(GET_TRIP_API(trip_id))
             const data = await res.json()
             setTrip(data)
         } 
@@ -86,25 +76,24 @@ const TripDetails = () => {
     async function rebook ()
     {
         console.log(trip_book)
-        fetch('http://209.38.168.38/trip/customer/book/call-center', {
-        method: 'POST',
-        
-        headers: { 
-            "Content-Type": "application/json", 
-            'Accept': 'application/json',
-        },
-    
-        body: JSON.stringify(trip_book)
-        
-        })
+        fetch(
+            POST_BOOK_TRIP, 
+            {
+                method: 'POST',
+                
+                headers: 
+                { 
+                    "Content-Type": "application/json", 
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(trip_book)
+            }
+        )
         .then((res) => { return res.json() })
-        .then(tripBooked => {
-        console.log(tripBooked)
+        .then( tripBooked => {
+            setTripBook(tripBooked)
         })
     }
-
-    
-
 
     return (
         <div className="trip-details">
@@ -157,6 +146,9 @@ const TripDetails = () => {
         Re Book
         </Button>
 
+        {trip_booked && 
+            <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully! <FaCarSide /></Link> 
+        }
 
       </div>
     );

@@ -3,6 +3,7 @@ import { COLUMNS } from './columns'
 import './table.css'
 import { useTable, useFilters, useGlobalFilter } from 'react-table'
 import VehicleDetailLink from './VehicleDetailsLink';
+import { ColumnFilter } from './ColumnFilter'
 
 
 const VehicleTable =  () => {
@@ -25,18 +26,25 @@ const VehicleTable =  () => {
     } 
     search_vehicle(search);
  }, [])
+
+ const defaultColumn = React.useMemo(
+  () => ({
+    Filter: ColumnFilter
+  }),
+  []
+)
   
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    footerGroups,
     rows,
     prepareRow
   } = useTable({
     columns,
-    data
-  })
+    data,
+    defaultColumn
+  }, useFilters,)
 
   return (
     <>
@@ -45,7 +53,9 @@ const VehicleTable =  () => {
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th {...column.getHeaderProps()}>{column.render('Header')}
+                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                </th>
               ))}
             </tr>
           ))}

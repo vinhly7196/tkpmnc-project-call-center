@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { GoogleMap, useLoadScript, MarkerF, DirectionsRenderer, Autocomplete } from "@react-google-maps/api";
 import { REACT_APP_GOOGLE_MAPS_KEY } from "./Constant";
 import axios from 'axios';
+import { MdOutlinePlace } from "react-icons/md";
 
 // import Autocomplete from "react-google-autocomplete";
 import {
@@ -140,7 +141,7 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
   return (
 
     <div style={{ marginTop: "50px" }}>
-      <label>Add Pickup / Destination</label>
+      <label><MdOutlinePlace />Add Pickup / Destination</label>
       <Autocomplete 
       restrictions={{ country: "VN" }}
       >
@@ -186,15 +187,14 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
           <DirectionsRenderer directions={directionsResponse} />
         )}
 
-
-
       </GoogleMap>
       <ButtonGroup>
+        
         <Button colorScheme='pink'  onClick={calculateRoute}>
-          Confirm Information
+        Confirm Information
         </Button>
 
-        <IconButton
+        <IconButton 
               aria-label='center back'
               onClick={clearRoute}
             />

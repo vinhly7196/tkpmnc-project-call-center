@@ -5,8 +5,12 @@ import useFetch from "./useFetch";
 import Datetime from 'react-datetime';
 import {Link} from 'react-router-dom';
 import { POST_BOOK_TRIP, GET_VEHICILE_TYPES } from './Constant'
-
-
+import { FaCarSide } from "react-icons/fa";
+import { FcCustomerSupport } from "react-icons/fc";
+import { FaSquarePhone } from "react-icons/fa6";
+import { RiEBike2Fill } from "react-icons/ri";
+import { FcManager } from "react-icons/fc";
+import { RiCalendarScheduleFill } from "react-icons/ri";
 const Create = () => {
   const [customer_name, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
@@ -125,9 +129,9 @@ const Create = () => {
       { isPending && <div>Loading...</div> }
       { carType && 
       <div>
-      <h2>Add a New Trip</h2>
+      <h2><FcCustomerSupport />Add a New Trip</h2>
       <form onSubmit={handleSubmit}>
-        <label>Customer:</label>
+        <label><FcManager />Customer:</label>
         <input 
           type="text" 
           required 
@@ -135,14 +139,14 @@ const Create = () => {
           onChange={(e) => setCustomerName(e.target.value)}
         />
 
-        <label>Phone:</label>
+        <label><FaSquarePhone />Phone:</label>
         <input
           required
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         ></input>   
 
-        <label>Vehicle Type:</label>
+        <label><RiEBike2Fill />Vehicle Type:</label>
         <select
           value={vehicle_type}
           onChange={(e) => setVehicleType(e.target.value)}
@@ -154,7 +158,7 @@ const Create = () => {
           }
         </select>
 
-        <label>Request Type</label>
+        <label><RiCalendarScheduleFill />Request Type</label>
         <select
           value={requestType}
           onChange={(e) => setRequestType(e.target.value)}
@@ -187,7 +191,7 @@ const Create = () => {
         }
 
         {trip_booked && 
-        <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully {trip_book.id}!</Link> 
+        <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully! <FaCarSide /></Link> 
         }
     </div>
   );

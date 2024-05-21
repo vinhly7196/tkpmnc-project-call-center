@@ -1,8 +1,9 @@
-import React, { useMemo, useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { TRIPS_COLUMNS } from './TripColumns'
 import './table.css'
 import { useTable, useFilters, useGlobalFilter } from 'react-table'
-
+import { TRIP_STATUS } from './Constant'
+import { ColumnFilter } from './ColumnFilter'
 
 
 const TripList = ({trips }) => {
@@ -11,23 +12,33 @@ const TripList = ({trips }) => {
     //   filter trip from call-center
     const trips_call_center = trips.filter(function (el) 
     {
-        return el.request_from === "call-center"
+        return (el.request_from === "call-center" && TRIP_STATUS.includes(el.status))
     });
     const [data, setData] = useState(trips_call_center);
 
     const initialState = { hiddenColumns: ['id'] };
+
+    const defaultColumn = React.useMemo(
+        () => ({
+          Filter: ColumnFilter
+        }),
+        []
+    )
+
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
-        footerGroups,
         rows,
         prepareRow
     } = useTable({
         columns,
         data,
+        defaultColumn,
         initialState
-    })
+        },
+        useFilters,
+)
 
     return (
         <>
@@ -36,7 +47,9 @@ const TripList = ({trips }) => {
             {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                    <th {...column.getHeaderProps()}>{column.render('Header')}
+                    <div>{column.canFilter ? column.render('Filter') : null}</div>
+                    </th>
                 ))}
                 </tr>
             ))}
@@ -48,11 +61,8 @@ const TripList = ({trips }) => {
                 <tr {...row.getRowProps()}>
                     {row.cells.map(cell => {
                     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                    })}
-
-                    
+                    })}                    
                 </tr>
-
                 )
             })}
             </tbody>
