@@ -5,12 +5,14 @@ import dateFormat from "dateformat";
 import { GET_TRIP_API, POST_BOOK_TRIP } from './Constant'
 import {Link} from 'react-router-dom';
 import { FaCarSide } from "react-icons/fa";
+import axios from 'axios';
 
 
 const TripDetails = () => {
     const { trip_id } = useParams()
     const [trip, setTrip] = useState()
     const [trip_booked, setTripBook] = useState()
+    
     const customer = {
         id: "",
         name: trip?.customer?.name,
@@ -60,22 +62,53 @@ const TripDetails = () => {
     
     const date = dateFormat(trip?.request_time, "dddd, dS mmmm, yyyy, h:MM:ss TT");
     const price_show = trip?.price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
+    let book_status = "" 
+    const [booking, setBooking] = useState(false)
+    
     // get data 
-    useEffect(() => {
-        async function search_trip(trip_id) 
-        {
-            const res = await fetch(GET_TRIP_API(trip_id))
-            const data = await res.json()
-            setTrip(data)
-        } 
-        search_trip(trip_id)
-    }, [])
+    // useEffect(() => {
+    //     async function search_trip(trip_id) 
+    //     {
+    //         const res = await fetch(GET_TRIP_API(trip_id))
+    //         const data = await res.json()
+    //         setTrip(data)
+    //     } 
+    //     search_trip(trip_id)
+    // }, [])
 
+    useEffect(() => {
+        const getChargersData = () => {
+          axios.get(GET_TRIP_API(trip_id))
+            .then(res => {
+                setTrip(res.data);
+                book_status = res.data.status;
+                console.log(book_status)
+            })
+        }
+        getChargersData()
+    
+        const interval = setInterval(() => {
+            getChargersData()
+            if (book_status === "End" || book_status === "Done")
+            {
+                clearInterval();
+            } 
+        }, 5 * 1000);
+        
+
+        // if (book_status !== "End" && book_status !== "Done")
+        // {
+        //     clearInterval(interval);
+        // }            
+
+        return () => clearInterval();
+
+      },[]);
     
 
     async function rebook ()
     {
-        console.log(trip_book)
+        setBooking(true)
         fetch(
             POST_BOOK_TRIP, 
             {
@@ -92,6 +125,7 @@ const TripDetails = () => {
         .then((res) => { return res.json() })
         .then( tripBooked => {
             setTripBook(tripBooked)
+            setBooking(false)
         })
     }
 
@@ -142,13 +176,12 @@ const TripDetails = () => {
           
             
 
-        <Button colorScheme='pink'  onClick={rebook}>
+        {book_status === "End" && <Button colorScheme='pink'  onClick={rebook}>
         Re Book
-        </Button>
+        </Button>}
 
-        {trip_booked && 
-            <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully! <FaCarSide /></Link> 
-        }
+
+        {booking  && <div className="price">Booking...</div>}
 
       </div>
     );

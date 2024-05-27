@@ -39,7 +39,6 @@ const Create = () => {
 
   const {data: carType, error, isPending } = useFetch(GET_VEHICILE_TYPES);
 
-  console.log(carType)
   // set field to call api
   const customer = {
     id: "102",
@@ -103,12 +102,13 @@ const Create = () => {
     vehicle_type: vehicle_type
   };
   const price_show = price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
-  
-  
+  const [book_status, setBookStatus] = useState(false) 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(POST_BOOK_TRIP, {
+    setBookStatus(true)
+    fetch(POST_BOOK_TRIP, 
+      {
       method: 'POST',
       headers: { 
         "Content-Type": "application/json", 
@@ -120,6 +120,7 @@ const Create = () => {
     .then((res) => { return res.json() })
     .then(tripBooked => {
       setTripBook(tripBooked)
+      setBookStatus(false)
     })
   }
 
@@ -185,14 +186,18 @@ const Create = () => {
         <div className="price">
               { price_show && <div>Price: {price_show} VND</div> }
             </div>
-        <button>Book</button>
+        {!trip_booked && <button>Book</button>}
       </form>
       </div>
+       
         }
+      <div> 
+        {book_status && <div className="price">Booking...</div>}
 
         {trip_booked && 
-        <Link to={`/TripDetails/${trip_book.id}`}>Booked Successfully! <FaCarSide /></Link> 
+        <button><Link to={`/TripDetails/${trip_book.id}`} style={{color: "white"}}>Booked Successfully! <FaCarSide /></Link></button> 
         }
+      </div>
     </div>
   );
 }

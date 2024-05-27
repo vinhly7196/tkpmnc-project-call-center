@@ -133,10 +133,10 @@ button {
 }
 .price {
   background: #99ff66;
-  color: #fff;
+  color: #f1356d;
   border: 0;
-  padding: 8px;
-  margin: 2px;
+  padding: 12px;
+  margin: 4px;
   border-radius: 8px;
   cursor: pointer;
 }

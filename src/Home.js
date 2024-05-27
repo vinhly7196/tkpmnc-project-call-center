@@ -13,16 +13,12 @@ const Home = () => {
       setTrips(data)
   };
   useEffect(() => {
-    // const getChargersData = () => {
-    //   callApi();
-    // }
-
     const getChargersData = () => {
       axios.get(GET_ALL_TRIP_API)
         .then(res => {
           setTrips(res.data);
         })
-        console.log("read api")
+        
     }
     getChargersData()
 
