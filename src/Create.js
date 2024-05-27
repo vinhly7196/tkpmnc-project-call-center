@@ -42,7 +42,7 @@ const Create = () => {
   console.log(carType)
   // set field to call api
   const customer = {
-    id: "",
+    id: "102",
     name: customer_name,
     phone: phone,
     rank: "NORMAL",

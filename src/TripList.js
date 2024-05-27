@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { TRIPS_COLUMNS } from './TripColumns'
 import './table.css'
 import { useTable, useFilters, useGlobalFilter } from 'react-table'
@@ -8,14 +8,7 @@ import { ColumnFilter } from './ColumnFilter'
 
 const TripList = ({trips }) => {
     const columns = useMemo(() => TRIPS_COLUMNS, [])
-
-    //   filter trip from call-center
-    const trips_call_center = trips.filter(function (el) 
-    {
-        return (el.request_from === "call-center" && TRIP_STATUS.includes(el.status))
-    });
-    const [data, setData] = useState(trips_call_center);
-
+    const [data, setData] = useState([]);
     const initialState = { hiddenColumns: ['id'] };
 
     const defaultColumn = React.useMemo(
@@ -24,6 +17,15 @@ const TripList = ({trips }) => {
         }),
         []
     )
+
+    useEffect(() => {
+        //   filter trip from call-center
+    const trips_call_center = trips.filter(function (el) 
+    {
+        return (el.request_from === "call-center")
+    });
+    setData(trips_call_center)
+    },[trips]);
 
     const {
         getTableProps,
@@ -38,10 +40,14 @@ const TripList = ({trips }) => {
         initialState
         },
         useFilters,
-)
+    )
 
     return (
         <>
+        {data &&
+
+        
+        
         <table {...getTableProps()}>
             <thead>
             {headerGroups.map(headerGroup => (
@@ -68,7 +74,9 @@ const TripList = ({trips }) => {
             </tbody>
 
         </table>
-        </>
+       
+    }
+     </>
     )
 };
 
