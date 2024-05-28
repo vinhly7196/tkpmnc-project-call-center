@@ -1,15 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { TRIPS_COLUMNS } from './TripColumns'
 import './table.css'
-import { useTable, useFilters, useGlobalFilter } from 'react-table'
-import { TRIP_STATUS } from './Constant'
+import { useTable, useFilters, useSortBy  } from 'react-table'
 import { ColumnFilter } from './ColumnFilter'
 
 
 const TripList = ({trips }) => {
     const columns = useMemo(() => TRIPS_COLUMNS, [])
     const [data, setData] = useState([]);
-    const initialState = { hiddenColumns: ['id'] };
+    const initialState = { 
+        hiddenColumns: ['id', "request_time"],
+        sortBy: [
+            {
+                id: 'status',
+                desc: true
+            },
+            {
+                id: 'request_time',
+                desc: false
+            }
+        ]
+    
+    };
 
     const defaultColumn = React.useMemo(
         () => ({
@@ -33,13 +45,15 @@ const TripList = ({trips }) => {
         headerGroups,
         rows,
         prepareRow
-    } = useTable({
-        columns,
-        data,
-        defaultColumn,
-        initialState
+    } = useTable(
+        {
+            columns,
+            data,
+            defaultColumn,
+            initialState
         },
         useFilters,
+        useSortBy
     )
 
     return (

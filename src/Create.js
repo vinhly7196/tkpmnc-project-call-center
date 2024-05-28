@@ -186,7 +186,7 @@ const Create = () => {
         <div className="price">
               { price_show && <div>Price: {price_show} VND</div> }
             </div>
-        {!trip_booked && <button>Book</button>}
+        {!trip_booked && !trip_booked && <button>Book</button>}
       </form>
       </div>
        

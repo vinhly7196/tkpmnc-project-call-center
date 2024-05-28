@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/react'
 import dateFormat from "dateformat";
 import { GET_TRIP_API, POST_BOOK_TRIP } from './Constant'
-import {Link} from 'react-router-dom';
-import { FaCarSide } from "react-icons/fa";
+
 import axios from 'axios';
 
 
@@ -14,7 +13,7 @@ const TripDetails = () => {
     const [trip_booked, setTripBook] = useState()
     
     const customer = {
-        id: "",
+        id: "102",
         name: trip?.customer?.name,
         phone: trip?.customer?.phone,
         rank: "NORMAL",
@@ -57,37 +56,34 @@ const TripDetails = () => {
         request_time: trip?.request_time,
         request_type: trip?.request_type,
         requester,
-        vehicle_type: trip?.vehicle_type
+        vehicle_type: trip?.vehicle_type?.id
     };
     
     const date = dateFormat(trip?.request_time, "dddd, dS mmmm, yyyy, h:MM:ss TT");
     const price_show = trip?.price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
     let book_status = "" 
-    const [booking, setBooking] = useState(false)
     
-    // get data 
-    // useEffect(() => {
-    //     async function search_trip(trip_id) 
-    //     {
-    //         const res = await fetch(GET_TRIP_API(trip_id))
-    //         const data = await res.json()
-    //         setTrip(data)
-    //     } 
-    //     search_trip(trip_id)
-    // }, [])
-
+    const [booking, setBooking] = useState(false)
+    const [re_book, setReBook] = useState(false)
+    
     useEffect(() => {
+        
         const getChargersData = () => {
           axios.get(GET_TRIP_API(trip_id))
             .then(res => {
                 setTrip(res.data);
                 book_status = res.data.status;
+                if (book_status === "End")
+                {
+                    setReBook(true)
+                }
             })
         }
         getChargersData()
     
         const interval = setInterval(() => {
             getChargersData()
+
             if (book_status === "End" || book_status === "Done")
             {
                 clearInterval(interval);
@@ -97,8 +93,10 @@ const TripDetails = () => {
       },[]);
     
 
-    async function rebook ()
+    async function rebook()
     {
+
+        console.log(trip_book)
         setBooking(true)
         fetch(
             POST_BOOK_TRIP, 
@@ -122,9 +120,11 @@ const TripDetails = () => {
 
     return (
         <div className="trip-details">
-          
+        
+
         <h2>Trip {trip_id}</h2>
         
+        {trip && 
         <table>
 
           <tr>
@@ -150,6 +150,11 @@ const TripDetails = () => {
           </tr>
 
           <tr>
+              <td>Driver</td>
+              <td>{trip?.driver?.name} - {trip?.driver?.phone}</td>
+          </tr>
+
+          <tr>
               <td>Request Type</td>
               <td>{trip?.request_type}</td>
           </tr>
@@ -164,16 +169,13 @@ const TripDetails = () => {
           </tr> 
 
           </table>
-          
+        }
             
 
-        {book_status === "End" && <Button colorScheme='pink'  onClick={rebook}>
-        Re Book
-        </Button>}
-
-
-        {booking  && <div className="price">Booking...</div>}
-
+        {re_book && !booking && <Button colorScheme='pink'  onClick={rebook}> Re Book </Button>}
+        
+        {booking && <div className="price">Booking...</div>}
+            
       </div>
     );
 }

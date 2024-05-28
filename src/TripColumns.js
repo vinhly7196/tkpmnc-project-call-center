@@ -37,10 +37,23 @@ export const TRIPS_COLUMNS = [
     disableFilters: true
   },
   {
+    Header: 'Request Time',
+    accessor: 'request_time',
+    disableFilters: true
+  },
+  {
     Header: 'Status',
     accessor: 'status',
-    Cell: ({ row }) => {
+    Cell: ({ row }) => 
+    {
       return <Link to={`/TripDetails/${row.original.id}`}>{row.original.status}</Link> 
+    },
+    sortType: (a, b) => {
+      if (a.values['status'] === "End") 
+        {
+          return 1;
+      }
+      return 0;
     }
   }
 ]
