@@ -82,7 +82,6 @@ const TripDetails = () => {
             .then(res => {
                 setTrip(res.data);
                 book_status = res.data.status;
-                console.log(book_status)
             })
         }
         getChargersData()
@@ -91,17 +90,9 @@ const TripDetails = () => {
             getChargersData()
             if (book_status === "End" || book_status === "Done")
             {
-                clearInterval();
+                clearInterval(interval);
             } 
-        }, 5 * 1000);
-        
-
-        // if (book_status !== "End" && book_status !== "Done")
-        // {
-        //     clearInterval(interval);
-        // }            
-
-        return () => clearInterval();
+        }, 5 * 1000);       
 
       },[]);
     
