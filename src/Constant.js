@@ -3,6 +3,9 @@ const GET_ALL_TRIP_API = "http://209.38.168.38/trip/get?skip=0&limit=0"
 const POST_BOOK_TRIP = "http://209.38.168.38/trip/customer/book/call-center"
 const GET_VEHICILE_TYPES = "http://209.38.168.38/vehicle/vehicle-types"
 
+const CANCEL_TRIP = (id) => {
+    return `http://209.38.168.38/trip/cancel/${id}`
+}
 
 const GET_TRIP_API = (id) => {
     return `http://209.38.168.38/trip/get/${id}`
@@ -36,7 +39,8 @@ export {
     GET_TRIP_API,
     GET_VEHICLE_API,
     GET_VEHICLE_DOC_API,
-    TRIP_STATUS
+    TRIP_STATUS, 
+    CANCEL_TRIP
 };
 
 

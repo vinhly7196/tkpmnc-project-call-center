@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/react'
 import dateFormat from "dateformat";
-import { GET_TRIP_API, POST_BOOK_TRIP } from './Constant'
+import { GET_TRIP_API, POST_BOOK_TRIP, CANCEL_TRIP } from './Constant'
 
 import axios from 'axios';
 
@@ -65,7 +65,7 @@ const TripDetails = () => {
     
     const [booking, setBooking] = useState(false)
     const [re_book, setReBook] = useState(false)
-    
+    const [cancel_trip, setCancelTrip] = useState(false)
     useEffect(() => {
         
         const getChargersData = () => {
@@ -77,6 +77,10 @@ const TripDetails = () => {
                 {
                     setReBook(true)
                 }
+                if (book_status === "Cancelled")
+                {
+                    setCancelTrip(true)
+                }
             })
         }
         getChargersData()
@@ -84,19 +88,17 @@ const TripDetails = () => {
         const interval = setInterval(() => {
             getChargersData()
 
-            if (book_status === "End" || book_status === "Done")
+            if (book_status === "End" || book_status === "Done" || book_status === "Cancelled")
             {
                 clearInterval(interval);
             } 
         }, 5 * 1000);       
 
-      },[]);
+      },[cancel_trip]);
     
 
     async function rebook()
     {
-
-        console.log(trip_book)
         setBooking(true)
         fetch(
             POST_BOOK_TRIP, 
@@ -116,6 +118,24 @@ const TripDetails = () => {
             setTripBook(tripBooked)
             setBooking(false)
         })
+    }
+
+    async function cancel()
+    {
+        fetch(
+            CANCEL_TRIP(trip_id), 
+            {
+                method: 'POST',
+                
+                headers: 
+                { 
+                    "Content-Type": "application/json", 
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({})
+            }
+        )
+        .then((res) => { setCancelTrip(true)  })
     }
 
     return (
@@ -172,8 +192,8 @@ const TripDetails = () => {
         }
             
 
-        {re_book && !booking && <Button colorScheme='pink'  onClick={rebook}> Re Book </Button>}
-        
+        {re_book && !booking && !cancel_trip && <Button colorScheme='pink'  onClick={rebook}> Re Book </Button>}
+        {re_book && !booking && <Button colorScheme='pink'  onClick={cancel}> Cancel </Button>}
         {booking && <div className="price">Booking...</div>}
             
       </div>
