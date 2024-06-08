@@ -44,12 +44,15 @@ const getLatLngFromPlaceId = async (placeId) => {
     return null;
   }
 };
+const libraries = ["places"];
+const language = "vi";
 
 const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress, setDistance,setTripId, setPrice, trip_estimate  }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: REACT_APP_GOOGLE_MAPS_KEY,
-    libraries: ['places'],
-    region: ['VN']
+    libraries,
+    region: ['VN'],
+    language
   });
   const mapRef = React.useRef();
   const onMapLoad = React.useCallback((map) => {
