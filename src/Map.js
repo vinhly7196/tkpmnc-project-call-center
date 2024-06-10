@@ -5,6 +5,11 @@ import { REACT_APP_GOOGLE_MAPS_KEY } from "./Constant";
 import axios from 'axios';
 import { MdOutlinePlace } from "react-icons/md";
 
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
+
 // import Autocomplete from "react-google-autocomplete";
 import {
   Box,
@@ -44,6 +49,9 @@ const getLatLngFromPlaceId = async (placeId) => {
     return null;
   }
 };
+
+
+
 const libraries = ["places"];
 const language = "vi";
 
@@ -73,6 +81,17 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
     lng: 106.694420,
   });
 
+  const handleSelect = (address) => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng);
+  
+        // update center state
+        setSource(latLng);
+      })
+      .catch(error => console.error('Error', error));
+  };
 
 
   if (loadError) return "Error";
@@ -141,6 +160,8 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
     destiantionRef.current.value = ''
   }
 
+  
+
   return (
 
     <div style={{ marginTop: "50px" }}>
@@ -152,7 +173,7 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
         type='text' 
         placeholder='Nơi đón khách' 
         ref={originRef} 
-        // onChange={(e) => setOriAddress(e.target.value)}
+        onSelect={(e) => handleSelect(e.target.value)}
         />
       </Autocomplete>
 
@@ -161,7 +182,7 @@ const MapComponent = ({ setOrigin, setDestination, setOriAddress, setDestAddress
                 type='text'
                 placeholder='Nơi trả khách'
                 ref={destiantionRef}
-                // onChange={(e) => setDestAddress(e.target.value)}
+                onSelect={(e) => handleSelect(e.target.value)}
               />
       </Autocomplete>
 
