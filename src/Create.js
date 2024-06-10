@@ -103,6 +103,13 @@ const Create = () => {
   };
   const price_show = price.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
   const [book_status, setBookStatus] = useState(false) 
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13 ) {
+      event.preventDefault();
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -131,7 +138,7 @@ const Create = () => {
       { carType && 
       <div>
       <h2><FcCustomerSupport />Add a New Trip</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         <label><FcManager />Customer:</label>
         <input 
           type="text" 
